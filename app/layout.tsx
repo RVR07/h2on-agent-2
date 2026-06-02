@@ -6,17 +6,15 @@ const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "H2On Agent Vocal",
-  description: "Asistent vocal AI pentru clienții H2On — facturi, comenzi, produse",
+  description: "Asistent vocal AI H2On",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ro" className="h-full">
-      <body className={`${geist.className} h-full antialiased`}>{children}</body>
+    <html lang="ro">
+      <body className={geist.className} style={{ background: "transparent" }}>
+        {children}
+      </body>
     </html>
   );
 }
