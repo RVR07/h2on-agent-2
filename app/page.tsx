@@ -3,6 +3,7 @@
 import { ConversationProvider } from "@elevenlabs/react";
 import VoiceAgent from "./components/VoiceAgent";
 import InfoCard from "./components/InfoCard";
+import H2OnWidget from "./components/H2OnWidget";
 import { Droplets, FileText, ShoppingCart, PhoneCall } from "lucide-react";
 
 export default function Home() {
@@ -81,6 +82,9 @@ export default function Home() {
             © {new Date().getFullYear()} H2On · Powered by ElevenLabs AI
           </footer>
         </div>
+
+        {/* Floating widget — transparent, embeddable */}
+        <H2OnWidget />
       </main>
     </ConversationProvider>
   );
