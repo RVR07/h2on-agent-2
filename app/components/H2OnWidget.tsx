@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useConversation } from "@elevenlabs/react";
-import { Mic, MicOff, PhoneOff, X } from "lucide-react";
+import { Mic, MicOff, Phone, PhoneOff, X } from "lucide-react";
 
 /* ── Color tokens ────────────────────────────────────────────────────────── */
 const C = {
@@ -62,8 +62,20 @@ export default function H2OnWidget() {
     setMessages([]);
   }, [conversation]);
 
-  const handleOpen  = () => { setOpen(true); setTimeout(() => start(), 300); };
-  const handleClose = () => { stop(); setOpen(false); };
+  // Hang up only — keeps panel open
+  const hangUp = useCallback(async () => {
+    await conversation.endSession();
+    setMessages([]);
+  }, [conversation]);
+
+  // Close panel (and end call if active)
+  const handleClose = useCallback(async () => {
+    if (isConnected || isConnecting) await conversation.endSession();
+    setOpen(false);
+    setMessages([]);
+  }, [conversation, isConnected, isConnecting]);
+
+  const handleOpen = () => { setOpen(true); setTimeout(() => start(), 300); };
 
   /* Waveform */
   useEffect(() => {
@@ -308,24 +320,36 @@ export default function H2OnWidget() {
       <div style={{
         padding: "10px 14px 16px",
         borderTop: `1px solid ${C.border}`,
-        display: "flex", justifyContent: "center",
+        display: "flex", justifyContent: "center", gap: "10px",
       }}>
         {isConnected ? (
-          <button onClick={stop} style={{
-            display: "flex", alignItems: "center", gap: "8px",
-            padding: "9px 22px", borderRadius: "20px", border: "none",
-            background: `linear-gradient(135deg, ${C.red}, #dc2626)`,
-            color: C.white, fontWeight: 600, fontSize: "13px",
-            cursor: "pointer",
-            boxShadow: `0 4px 16px rgba(239,68,68,0.3)`,
-          }}>
-            <PhoneOff size={14} />
-            Închide
-          </button>
+          <>
+            <button onClick={hangUp} style={{
+              display: "flex", alignItems: "center", gap: "7px",
+              padding: "9px 20px", borderRadius: "20px", border: "none",
+              background: `linear-gradient(135deg, ${C.red}, #dc2626)`,
+              color: C.white, fontWeight: 600, fontSize: "13px",
+              cursor: "pointer",
+              boxShadow: `0 4px 16px rgba(239,68,68,0.3)`,
+            }}>
+              <PhoneOff size={14} />
+              Închide apelul
+            </button>
+          </>
+        ) : isConnecting ? (
+          <div style={{ fontSize: "11px", color: C.gray }}>Inițializare...</div>
         ) : (
-          <div style={{ fontSize: "11px", color: C.gray, textAlign: "center" }}>
-            {isConnecting ? "Inițializare..." : "Apăsați X pentru a închide"}
-          </div>
+          <button onClick={start} style={{
+            display: "flex", alignItems: "center", gap: "7px",
+            padding: "9px 20px", borderRadius: "20px", border: "none",
+            background: `linear-gradient(135deg, ${C.gold}, ${C.goldLight})`,
+            color: C.navy, fontWeight: 700, fontSize: "13px",
+            cursor: "pointer",
+            boxShadow: `0 4px 16px rgba(192,148,73,0.35)`,
+          }}>
+            <Phone size={14} />
+            Sună
+          </button>
         )}
       </div>
 
