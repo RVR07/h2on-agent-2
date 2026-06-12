@@ -35,6 +35,15 @@ export async function POST(
     body,
   });
 
-  const data = await odooRes.json();
-  return NextResponse.json(data, { status: odooRes.status });
+  // Normalize text in Odoo responses for correct TTS pronunciation
+  const raw = await odooRes.text();
+  const normalized = raw
+    .replace(/H2On/g, "H 2 On")
+    .replace(/H2ON/g, "H 2 On")
+    .replace(/H2on/g, "H 2 On");
+
+  return new NextResponse(normalized, {
+    status: odooRes.status,
+    headers: { "Content-Type": "application/json" },
+  });
 }
