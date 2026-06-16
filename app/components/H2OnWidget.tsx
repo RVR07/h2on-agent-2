@@ -201,10 +201,8 @@ export default function H2OnWidget() {
             </svg>
           </div>
           <div>
-            <div style={{ color: C.white, fontWeight: 700, fontSize: "14px", lineHeight: 1.2 }}>
-              H2On
-            </div>
-            <div style={{ color: C.gray, fontSize: "11px" }}>
+            <img src="/nvidia-inception.png" alt="NVIDIA Inception Program" style={{ height: "28px", display: "block" }} />
+            <div style={{ color: C.gray, fontSize: "11px", marginTop: "2px" }}>
               {isConnected
                 ? isSpeaking ? "Vorbește..." : "Ascultă..."
                 : isConnecting ? "Se conectează..."
