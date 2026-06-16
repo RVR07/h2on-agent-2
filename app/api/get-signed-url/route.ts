@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/convai/conversation/get-signed-url?agent_id=${process.env.NEXT_PUBLIC_AGENT_ID}`,
-      {
-        headers: {
-          "xi-api-key": process.env.ELEVENLABS_API_KEY!,
-        },
-      }
-    );
+    const branchId = process.env.BRANCH_ID;
+    const url = new URL("https://api.elevenlabs.io/v1/convai/conversation/get-signed-url");
+    url.searchParams.set("agent_id", process.env.NEXT_PUBLIC_AGENT_ID!);
+    if (branchId) url.searchParams.set("branch_id", branchId);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        "xi-api-key": process.env.ELEVENLABS_API_KEY!,
+      },
+    });
 
     if (!response.ok) {
       throw new Error(`ElevenLabs returned ${response.status}`);
