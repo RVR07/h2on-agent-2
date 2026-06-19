@@ -77,6 +77,10 @@ export default function H2OnWidget() {
     setMessages([]);
   }, [conversation, isConnected, isConnecting]);
 
+  useEffect(() => {
+    window.parent.postMessage({ type: "h2on-resize", open }, "*");
+  }, [open]);
+
   const handleOpen = () => { setOpen(true); setTimeout(() => start(), 300); };
 
   /* Waveform */
