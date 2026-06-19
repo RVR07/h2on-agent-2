@@ -32,11 +32,13 @@ export default function H2OnWidget() {
   const animRef        = useRef<number>(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const normalize = (t: string) => t.replace(/H\s*2\s*On/gi, "H2On");
+
   const conversation = useConversation({
     onConnect:    () => setIsStarting(false),
     onDisconnect: () => cancelAnimationFrame(animRef.current),
     onMessage: (msg) => {
-      const text = msg.message ?? "";
+      const text = normalize(msg.message ?? "");
       if (text.trim())
         setMessages((p) => [...p, { id: crypto.randomUUID(), role: msg.role, text }]);
     },
